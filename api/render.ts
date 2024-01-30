@@ -2,22 +2,41 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 const chrome = require('chrome-aws-lambda')
 const puppeteer = require('puppeteer')
 
-const getAbsoluteURL = (path: string) => {
+// Fonction pour obtenir une URL absolue en fonction du chemin relatif et de l'environnement.
+const getAbsoluteURL = (path: string, params: Record<string, string>) => {
+  let baseUrl;
+
   if (process.env.NODE_ENV === 'development') {
-    return `http://localhost:3000${path}`
+    baseUrl = 'http://localhost:3000';
+  } else {
+    baseUrl = `https://${process.env.VERCEL_URL}`;
   }
-  return `https://${process.env.VERCEL_URL}${path}`
+
+  // Construction de la chaîne de requête avec les paramètres spécifiés
+  const queryString = Object.entries(params).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+
+  // Ajout de la chaîne de requête à l'URL de base
+  const absoluteURL = `${baseUrl}${path}?${queryString}`;
+
+  return absoluteURL;
 }
 
+// Définition de l'API Next.js
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+  // Extraction des paramètres de requête (HEAD, GLASS, CLOTHE, TONGUE, TEETH, SKIN, EYEBROWS, HAIR, NECKLACE, resolution)
   let {
-    query: { model, pageUrl, resolution }
+    query: { HEAD, GLASS, CLOTHE, TONGUE, TEETH, SKIN, EYEBROWS, HAIR, NECKLACE, resolution }
   } = req
 
-  if (!model) return res.status(400).end(`No model provided`)
+  // Vérification si les paramètres requis sont présents, sinon retourne une réponse avec statut 400 (Bad Request)
+  if (!HEAD || !GLASS || !CLOTHE || !TONGUE || !TEETH || !SKIN || !EYEBROWS || !HAIR || !NECKLACE) {
+    return res.status(400).end(`Missing required parameters`)
+  }
 
+  // Initialisation du navigateur Puppeteer
   let browser
 
+  // Configuration différente du navigateur en fonction de l'environnement
   if (process.env.NODE_ENV === 'production') {
     browser = await puppeteer.launch({
       args: chrome.args,
@@ -32,30 +51,37 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     })
   }
 
+  // Création d'une nouvelle page dans le navigateur
   const page = await browser.newPage()
 
+  // Configuration de la résolution de la page si spécifiée, sinon par défaut à 512x512
   if (resolution) {
     await page.setViewport({ width: resolution, height: resolution })
   } else {
     await page.setViewport({ width: 512, height: 512 })
   }
 
-  if (pageUrl) {
-    await page.goto(pageUrl)
-  } else {
-    await page.goto(getAbsoluteURL(`?model=${model}`))
-  }
+  // Construction de l'URL avec les paramètres spécifiés
+  const pageUrl = getAbsoluteURL(`?HEAD=${HEAD}&GLASS=${GLASS}&CLOTHE=${CLOTHE}&TONGUE=${TONGUE}&TEETH=${TEETH}&SKIN=${SKIN}&EYEBROWS=${EYEBROWS}&HAIR=${HAIR}&NECKLACE=${NECKLACE}`)
 
+  // Chargement de l'URL de la page à capturer
+  await page.goto(pageUrl)
+
+  // Attente que la page signale qu'elle est prête
   await page.waitForFunction('window.status === "ready"')
 
+  // Capture d'écran de la page et récupération des données au format PNG
   const data = await page.screenshot({
     type: 'png'
   })
 
+  // Fermeture du navigateur Puppeteer
   await browser.close()
-  // Set the s-maxage property which caches the images then on the Vercel edge
+
+  // Configuration des en-têtes de réponse pour le cache et le type de contenu
   res.setHeader('Cache-Control', 's-maxage=10, stale-while-revalidate')
   res.setHeader('Content-Type', 'image/png')
-  // Write the image to the response with the specified Content-Type
+
+  // Envoi des données de la capture d'écran en tant que réponse
   res.end(data)
 }

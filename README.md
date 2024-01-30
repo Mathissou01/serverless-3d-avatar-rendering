@@ -35,3 +35,16 @@ Example:
 Example:
 
 `https://serverless-3d-rendering.vercel.app/api/render?model=https://serverless-3d-rendering.vercel.app/DamagedHelmet.glb`
+
+On envoie à l'API plusieurs paramètre personnalisable comme  
+{
+HEAD,
+GLASS,
+CLOTHE,
+TONGUE,
+TEETH,
+SKIN,
+EYEBROWS,
+HAIR,
+NECKLACE
+}
