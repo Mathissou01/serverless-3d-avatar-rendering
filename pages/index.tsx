@@ -1,5 +1,5 @@
 import { Canvas } from '@react-three/fiber'
-import { Stage } from '@react-three/drei'
+import { Caustics, Stage } from '@react-three/drei'
 import { Suspense } from 'react'
 import { useRouter } from 'next/router'
 import { Head1 } from '../components/Head1'
@@ -18,6 +18,20 @@ import { Neck1 } from '../components/Neck1'
 import { Eye1 } from '../components/Eye1'
 import { Ear1 } from '../components/Ear1'
 import { Noose1 } from '../components/Noose1'
+import { Clothe1 } from '../components/Clothe1'
+import { Clothe2 } from '../components/Clothe2'
+import { Clothe3 } from '../components/Clothe3'
+import { Clothe4 } from '../components/Clothe4'
+import { Clothe5 } from '../components/Clothe5'
+import { Clothe6 } from '../components/Clothe6'
+import { Earings1 } from '../components/Earings1'
+import { Earings2 } from '../components/Earings2'
+import { Necklace2 } from '../components/Necklace2'
+import { Necklace1 } from '../components/Necklace1'
+import { Glass1 } from '../components/Glass1'
+import { Glass2 } from '../components/Glass2'
+import { Teeth1 } from '../components/Teeth1'
+import { Tongue1 } from '../components/Tongue1'
 
 const handleOnLoaded = () => {
   console.log('Model loaded')
@@ -42,6 +56,20 @@ const renderComponent = (componentName, props) => {
     Eye1: () => <Eye1 {...props} />,
     Noose1: () => <Noose1 {...props} />,
     Ear1: () => <Ear1 {...props} />,
+    Clothe1: () => <Clothe1 {...props} />,
+    Clothe2: () => <Clothe2 {...props} />,
+    Clothe3: () => <Clothe3 {...props} />,
+    Clothe4: () => <Clothe4 {...props} />,
+    Clothe5: () => <Clothe5 {...props} />,
+    Clothe6: () => <Clothe6 {...props} />,
+    Earings1: () => <Earings1 {...props} />,
+    Earings2: () => <Earings2 {...props} />,
+    Necklace1: () => <Necklace1 {...props} />,
+    Necklace2: () => <Necklace2 {...props} />,
+    Glass1: () => <Glass1 {...props} />,
+    Glass2: () => <Glass2 {...props} />,
+    Tongue1: () => <Tongue1 {...props} />,
+    Teeth1: () => <Teeth1 {...props} />,
     // Add more components as needed
   }
 
@@ -51,9 +79,9 @@ const renderComponent = (componentName, props) => {
 
 export default function ViewerPage() {
   const router = useRouter()
-  const { HEAD, NECK, NOOSE, EAR, EYE } = router.query
+  const { HEAD, NECK, NOOSE, EAR, EYE, NECKLACE, HAIR, GLASS, CLOTHE, TEETH, TONGUE } = router.query
 
-  if (!HEAD || !NECK || !NOOSE || !EAR || !EYE) {
+  if (!HEAD || !NECK || !NOOSE || !EAR || !EYE || !NECKLACE || !HAIR || !GLASS || !CLOTHE || !TEETH || !TONGUE ) {
     return (
       <>
         <p>
@@ -65,6 +93,12 @@ export default function ViewerPage() {
           {!NOOSE && <li>Noose</li>}
           {!EAR && <li>Ear</li>}
           {!EYE && <li>Eye</li>}
+          {!NECKLACE && <li>Necklace</li>}
+          {!HAIR && <li>Hair</li>}
+          {!GLASS && <li>Glass</li>}
+          {!CLOTHE && <li>Clothe</li>}
+          {!TEETH && <li>Teeth</li>}
+          {!TONGUE && <li>Tongue</li>}
         </ul>
       </>
     )
@@ -78,12 +112,20 @@ export default function ViewerPage() {
   return (
     <Canvas gl={{ preserveDrawingBuffer: true, antialias: true, alpha: true }} camera={{ fov: 50 }} shadows>
       <Suspense fallback={null}>
-        <Stage contactShadow shadows adjustCamera intensity={1} environment="city" preset="rembrandt">
+        <Stage contactShadow shadows adjustCamera intensity={0.6} environment="sunset" preset="portrait">
+          <Caustics backside lightSource={[2.5, 5, -2.5]}>
           {renderComponent(HEAD, componentProps)}
           {renderComponent(NECK, componentProps)}
           {renderComponent(NOOSE, componentProps)}
           {renderComponent(EYE, componentProps)}
           {renderComponent(EAR, componentProps)}
+          {renderComponent(NECKLACE, componentProps)}
+          {renderComponent(TEETH, componentProps)}
+          {renderComponent(TONGUE, componentProps)}
+          {renderComponent(CLOTHE, componentProps)}
+          {renderComponent(HAIR, componentProps)}
+          {renderComponent(GLASS, componentProps)}
+          </Caustics>
         </Stage>
       </Suspense>
     </Canvas>

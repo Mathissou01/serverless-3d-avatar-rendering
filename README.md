@@ -48,3 +48,5 @@ EYEBROWS,
 HAIR,
 NECKLACE
 }
+
+http://localhost:3000/?HEAD=Head1&NECK=Neck1&NOOSE=Noose1&EYE=Eye1&EAR=Ear1&NECKLACE=Necklace1&HAIR=Hair1&GLASS=Glass1&CLOTHE=Clothe1&TEETH=Teeth1&TONGUE=Tongue1

@@ -17,11 +17,11 @@ const getAbsoluteURL = (path: string, params: Record<string, string>): string =>
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   // Extraction des paramètres de requête (HEAD, NECK, NOOSE, EYE, EAR, resolution)
   const {
-    query: { HEAD, NECK, NOOSE, EYE, EAR, resolution },
+    query: { HEAD, NECK, NOOSE, EYE, EAR, HAIR, GLASS, CLOTHE, TEETH, TONGUE, resolution },
   } = req;
 
   // Vérification si les paramètres requis sont présents, sinon retourne une réponse avec statut 400 (Bad Request)
-  if (!HEAD || !NECK || !NOOSE || !EYE || !EAR) {
+  if (!HEAD || !NECK || !NOOSE || !EYE || !EAR || !HAIR || !GLASS || !CLOTHE || !TEETH || !TONGUE) {
     res.status(400).end('Missing required parameters');
     return;
   }
@@ -47,6 +47,11 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
       NOOSE: NOOSE as string,
       EYE: EYE as string,
       EAR: EAR as string,
+      HAIR: HAIR as string, // Include HAIR parameter
+      GLASS: GLASS as string, // Include GLASS parameter
+      CLOTHE: CLOTHE as string, // Include CLOTHE parameter
+      TEETH: TEETH as string, // Include TEETH parameter
+      TONGUE: TONGUE as string, // Include TONGUE parameter
     });
 
     // Chargement de l'URL de la page à capturer
