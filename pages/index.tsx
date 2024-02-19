@@ -110,9 +110,9 @@ export default function ViewerPage() {
   }
 
   return (
-    <Canvas gl={{ preserveDrawingBuffer: true, antialias: true, alpha: true }} camera={{ fov: 50 }} shadows>
+      <Canvas gl={{ preserveDrawingBuffer: true, antialias: true, alpha: true }} camera={{ fov: 50 }} shadows>
       <Suspense fallback={null}>
-        <Stage contactShadow shadows adjustCamera intensity={0.6} environment="sunset" preset="portrait">
+        <Stage contactShadow shadows adjustCamera={1.1} intensity={0.6} environment="sunset" preset="portrait">
           <Caustics backside lightSource={[2.5, 5, -2.5]}>
           {renderComponent(HEAD, componentProps)}
           {renderComponent(NECK, componentProps)}

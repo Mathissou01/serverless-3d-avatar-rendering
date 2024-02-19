@@ -49,4 +49,7 @@ HAIR,
 NECKLACE
 }
 
-http://localhost:3000/?HEAD=Head1&NECK=Neck1&NOOSE=Noose1&EYE=Eye1&EAR=Ear1&NECKLACE=Necklace1&HAIR=Hair1&GLASS=Glass1&CLOTHE=Clothe1&TEETH=Teeth1&TONGUE=Tongue1
+http://localhost:3000/leaderboard?HEAD=Head1&NECK=Neck1&NOOSE=Noose1&EARINGS=Earings1&EAR=Ear1&EYE=Eye1&NECKLACE=Necklace1&HAIR=Hair1&GLASS=Glass1&CLOTHE=Clothe1&TEETH=Teeth1&TONGUE=Tongue1&RANK=1
+Leaderboard:
+
+/leaderboard?HEAD=Head1&NECK=Neck1&NOOSE=Noose1&EAR=Ear1&EYE=Eye1&NECKLACE=Necklace1&HAIR=Hair1&GLASS=Glass1&CLOTHE=Clothe1&TEETH=Teeth1&TONGUE=Tongue1&RANK=1
